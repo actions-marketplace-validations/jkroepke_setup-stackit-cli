@@ -26,7 +26,7 @@ jobs:
         with:
           app-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
-      - uses: srvaroa/labeler@0a20eccb8c94a1ee0bed5f16859aece1c45c3e55 # v1.13.0
+      - uses: srvaroa/labeler@bf262763a8a8e191f5847873aecc0f29df84f957 # v1.14.0
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
   validate-labels:
@@ -48,7 +48,9 @@ jobs:
     name: check title prefix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: 'false'
       - name: check
         run: |
           PR_TITLE_PREFIX=$(echo "$PR_TITLE" | cut -d':' -f1)

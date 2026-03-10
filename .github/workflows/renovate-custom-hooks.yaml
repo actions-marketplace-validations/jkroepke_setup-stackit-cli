@@ -1,5 +1,7 @@
 name: renovate hooks
 
+permissions: {}
+
 on:
   pull_request:
     branches:
@@ -13,11 +15,14 @@ jobs:
   renovate-post-run:
     name: Renovate Post Upgrade Hook
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'jkroepke' && (github.actor == 'renovate[bot]' || github.actor == 'mend[bot]')
+    permissions:
+      contents: read
+    if: github.repository_owner == 'jkroepke' && github.actor == 'renovate[bot]' # zizmor: ignore[bot-conditions]
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       # Using a GitHub App token, because GitHub Actions doesn't run on commits from github-actions bot
       # Used App:
@@ -29,7 +34,7 @@ jobs:
           app-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
 
-      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version-file: package.json
 
@@ -104,8 +109,8 @@ jobs:
 
           # Call GitHub API
           curl https://api.github.com/graphql -f \
-               -sSf -H "Authorization: Bearer $GITHUB_TOKEN" \
-               --data "@$JSON_PAYLOAD_FILE"
+            -sSf -H "Authorization: Bearer $GITHUB_TOKEN" \
+            --data "@$JSON_PAYLOAD_FILE"
 
           # Clean up temporary files
           rm "$FILE_CHANGES_JSON_FILE" "$JSON_PAYLOAD_FILE"

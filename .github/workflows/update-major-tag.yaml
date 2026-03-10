@@ -12,11 +12,15 @@ jobs:
     if: github.repository_owner == 'jkroepke'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - run: |
-          TAG="${{ github.ref_name }}"
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: 'false'
+
+      - name: Push major tag
+        #language=bash
+        run: |
+          TAG="${GITHUB_REF_NAME}"
           if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            TAG="${{ github.ref_name }}"
             TAG="${TAG%%.*}"
             git tag -f "${TAG}"
             git push --tags --force
