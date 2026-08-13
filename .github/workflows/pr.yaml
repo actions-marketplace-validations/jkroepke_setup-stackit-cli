@@ -21,11 +21,12 @@ jobs:
       !contains(github.event.pull_request.labels.*.name, 'chore') &&
       !contains(github.event.pull_request.labels.*.name, '🛠️ dependencies')
     steps:
-      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
-          app-id: 1248576
+          client-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
+          permission-pull-requests: 'write'
       - uses: srvaroa/labeler@bf262763a8a8e191f5847873aecc0f29df84f957 # v1.14.0
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -48,7 +49,7 @@ jobs:
     name: check title prefix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: 'false'
       - name: check
